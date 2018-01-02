@@ -8,7 +8,7 @@ bot.login(process.env.BOT_TOKEN)
 
 bot.on('ready', function()
 {
-  bot.user.setGame('faire du sale').catch(console.error)
+  bot.user.setGame('faire du lesa').catch(console.error)
 })
 
 // Exemple de lecture + écriture
@@ -20,15 +20,15 @@ bot.on('message', function (message)
     var alea = Math.random()*3
     if (alea<1)
     {
-      message.channel.send('très très sale mamèèèèène tu le saiiiiiiis')
+      message.channel.send('... très très sale mamèèèèène tu le saiiiiiiis')
     }
     else if (alea<2)
     {
-      message.channel.send('shit de qualité supérieure mon srab')
+      message.channel.send('... shit de qualité supérieure mon srab')
     }
     else
     {
-      message.channel.send('bon pilon bien garni')
+      message.channel.send('... bon pilon bien garni')
     }
   }
 })
