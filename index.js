@@ -8,7 +8,7 @@ bot.login(process.env.BOT_TOKEN)
 
 bot.on('ready', function()
 {
-  bot.user.setGame('faire du lesa').catch(console.error)
+  bot.user.setPresence({ game: { name: 'some name', type: 0 } });
 })
 
 // Exemple de lecture + écriture
