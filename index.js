@@ -8,7 +8,7 @@ bot.login(process.env.BOT_TOKEN)
 
 bot.on('ready', function()
 {
-  bot.user.setPresence({ game: { name: 'some name', type: 0 } });
+  bot.user.setPresence({ game: { name: 'faire du sale', type: 0 } });
 })
 
 // Exemple de lecture + écriture
