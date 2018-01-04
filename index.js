@@ -9,14 +9,14 @@ bot.login(process.env.BOT_TOKEN)
 
  bot.on('ready', function()
  {
-   bot.user.setPresence({ game: { name: 'faire du lesaa', type: 0 } });
+   bot.user.setPresence({ game: { name: 'faire du sale', type: 0 } });
  })
 
 // Exemple de lecture + écriture + aléatoire
 
 bot.on('message', function (message)
 {
-  if (message.content === "duu" && message.channel.name == "general")
+  if (message.content === "du" && message.channel.name == "general")
   {
     var alea = Math.random()*3
     if (alea<1)
@@ -142,7 +142,6 @@ bot.on('message', function (message)
                   const emb = new Discord.RichEmbed()
                   emb.setTitle(titre)
                   emb.setColor(0x813370)
-               console.log(":D")
                   emb.addField("Nombre d'inscrits : " + messageCount, re)
                   message.channel.send(emb)
                 }
