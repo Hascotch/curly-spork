@@ -132,17 +132,24 @@ bot.on('message', function (message)
                 re += messagesArr[i].content
                 re += "> "
               }
-              message.channel.send({
-              embed: {color: 3447003, fields: [
-              {
-                name: "Nombre d'inscrits : " + messageCount,
-                value: re
-              }
-              ]}
-              })
+              
+              var sdh = bot.channels.find('name', 'main-event').fetchMessages({limit: 1})
+              .then(messages2 => 
+                {
+                  let titre = messages2.array()[0].content
+                  message.channel.send({
+                    embed: {color: 3447003, title: titre, fields: [
+                    {
+                      name: "Nombre d'inscrits : " + messageCount,
+                      value: re
+                    }
+                    ]}
+                    })
+                }
+              ).catch(console.error);
             }
           ).catch(console.error);
-        }, 100);
+        }, 100);   
       }
       else if (x==1)
       {
@@ -153,7 +160,6 @@ bot.on('message', function (message)
     }
    ) 
   .catch(console.error);
-
 }
 
 
@@ -210,14 +216,20 @@ bot.on('message', function (message)
                 re += messagesArr[i].content
                 re += "> "
               }
-              message.channel.send({
-              embed: {color: 3447003, fields: [
-              {
-                name: "Nombre d'inscrits : " + messageCount,
-                value: re
-              }
-              ]}
-              })
+              var sdh = bot.channels.find('name', 'main-event').fetchMessages({limit: 1})
+              .then(messages2 => 
+                {
+                  let titre = messages2.array()[0].content
+                  message.channel.send({
+                    embed: {color: 3447003, title: titre, fields: [
+                    {
+                      name: "Nombre d'inscrits : " + messageCount,
+                      value: re
+                    }
+                    ]}
+                    })
+                }
+              ).catch(console.error);
             }
           ).catch(console.error);
         }, 100);
