@@ -7,10 +7,10 @@ const bot = new Discord.Client()
 bot.login(process.env.BOT_TOKEN)
 
 
-bot.on('ready', function()
-{
-  bot.user.setGame('faire du sale').catch(console.error)
-})
+ bot.on('ready', function()
+ {
+   bot.user.setPresence({ game: { name: 'faire du sale', type: 0 } });
+ })
 
 // Exemple de lecture + écriture + aléatoire
 
