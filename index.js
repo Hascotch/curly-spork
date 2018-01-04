@@ -142,6 +142,7 @@ bot.on('message', function (message)
                   const emb = new Discord.RichEmbed()
                   emb.setTitle(titre)
                   emb.setColor(0x813370)
+               console.log(":D")
                   emb.addField("Nombre d'inscrits : " + messageCount, re)
                   message.channel.send(emb)
                 }
