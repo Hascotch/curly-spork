@@ -9,7 +9,7 @@ bot.login(process.env.BOT_TOKEN)
 
  bot.on('ready', function()
  {
-   bot.user.setPresence({ game: { name: 'faire du lesa', type: 0 } });
+   bot.user.setPresence({ game: { name: 'faire du lesaa', type: 0 } });
  })
 
 // Exemple de lecture + écriture + aléatoire
