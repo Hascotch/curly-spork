@@ -16,7 +16,7 @@ bot.login(process.env.BOT_TOKEN)
 
 bot.on('message', function (message)
 {
-  if (message.content === "du" && message.channel.name == "general")
+  if (message.content === "duu" && message.channel.name == "general")
   {
     var alea = Math.random()*3
     if (alea<1)
