@@ -140,7 +140,7 @@ bot.on('message', function (message)
                 {
                   titre = messages2.array()[0].content
                   message.channel.send({
-              embed: {color: 3447003, fields: [
+              embed: {color: 3447003, title: titre, fields: [
               {
                 name: "Nombre d'inscrits : " + messageCount,
                 value: re
@@ -224,7 +224,7 @@ bot.on('message', function (message)
                 {
                   titre = messages2.array()[0].content
                   message.channel.send({
-              embed: {color: 3447003, fields: [
+              embed: {color: 3447003, title: titre, fields: [
               {
                 name: "Nombre d'inscrits : " + messageCount,
                 value: re
@@ -317,11 +317,14 @@ bot.on('message', function (message)
         .then(messages2 => 
           {
             titre = messages2.array()[0].content
-            const emb = new Discord.RichEmbed()
-            emb.setTitle(titre)
-            emb.setColor(0x813370)
-            emb.addField("Nombre d'inscrits : " + messageCount, re)
-            message.channel.send(emb)
+                  message.channel.send({
+              embed: {color: 3447003, title: titre, fields: [
+              {
+                name: "Nombre d'inscrits : " + messageCount,
+                value: re
+              }
+              ]}
+              })
           }
         ).catch(console.error)
       }
