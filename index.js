@@ -141,7 +141,7 @@ bot.on('message', function (message)
                   titre = messages2.array()[0].content
                   const emb = new Discord.RichEmbed()
                   emb.setTitle(titre)
-                  emb.setColor(0x813370)
+                  // emb.setColor(0x813370)
                   emb.addField("Nombre d'inscrits : " + messageCount, re)
                   message.channel.send(emb)
                 }
@@ -222,7 +222,7 @@ bot.on('message', function (message)
                   titre = messages2.array()[0].content
                   const emb = new Discord.RichEmbed()
                   emb.setTitle(titre)
-                  emb.setColor(0x813370)
+                  // emb.setColor(0x813370)
                   emb.addField("Nombre d'inscrits : " + messageCount, re)
                   message.channel.send(emb)
                 }
