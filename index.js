@@ -1,15 +1,3 @@
-function liste(arr)
-{
-  var x = ""
-  var z = ""
-  for (var i =0 ; i<arr.length; i++)
-  {
-    z = x + arr[i] + " "
-    x = z
-  }
-  return x
-}
-
 // Préparation
 
 const Discord = require('discord.js')
@@ -18,16 +6,17 @@ const bot = new Discord.Client()
 
 bot.login(process.env.BOT_TOKEN)
 
+
 bot.on('ready', function()
 {
-  bot.user.setPresence({ game: { name: 'faire du sale', type: 0 } });
+  bot.user.setGame('faire du sale').catch(console.error)
 })
 
-// Exemple de lecture + écriture
+// Exemple de lecture + écriture + aléatoire
 
 bot.on('message', function (message)
 {
-  if (message.content === "du")
+  if (message.content === "du" && message.channel.name == "general")
   {
     var alea = Math.random()*3
     if (alea<1)
@@ -42,6 +31,7 @@ bot.on('message', function (message)
     {
       message.channel.send('bon pilon bien garni')
     }
+    message.delete(1000)
   }
 })
 
@@ -51,100 +41,200 @@ bot.on('message', function (message)
 {
   if (message.content.startsWith("/poll"))
   {
-    message.delete(3000)
+    message.delete(1000)
     console.log('J\'ai enlevé un /poll mamène')
   }
 })
 
-
-var inscrits = []
+// Inscriptions aux events
 
 bot.on('message', function (message)
 {
-  if (message.content === "-in")
+  if (message.content === "-in" && message.channel.name === "inscriptions-events")
   {
-    var x = 0
-    for(var i = 0; i<inscrits.length; i++)
+ 
+  var x = 0
+  var k = 0
+  var sdf = bot.channels.find('name','pilloniere').fetchMessages({limit: 100})
+  .then(messages => 
     {
-      if (inscrits[i]==message.author)
+      let messagesArr = messages.array();
+      let messageCount = messagesArr.length;
+      for (var i = 0; i<messageCount; i++)
       {
-        x=1
+        if (messagesArr[i].content == message.author.id)
+        {
+          x=1;
+        }
+        else
+        {
+          k++;
+        }
+      }
+
+      if (k==messageCount)
+      {
+
+        // PAS INSCRIT
+
+        // MAMEN
+        bot.channels.find('name','pilloniere').send(message.author.id)
+        
+        var alea = Math.random()*5
+        if (alea<1)
+        {
+          message.react("😁")
+        }
+        else if (alea<2)
+        {
+          message.react("🎉")
+        }
+        else if (alea<3)
+        {
+          message.react("🇳")
+          setTimeout(function()
+          {       
+            message.react("🇮")
+          }, 500);
+          setTimeout(function()
+          {       
+            message.react("🇨")
+          }, 1000);
+          setTimeout(function()
+          {       
+            message.react("🇪")
+          }, 1500);
+        }
+        else if (alea<4)
+        {
+          message.react("🙃")
+        }
+        else
+        {
+          message.react("😍")
+        }
+
+
+        
+        message.channel.send(message.author + " s'est inscrit(e) ! :blush:")
+        
+        setTimeout(function()
+        {
+          var re = ""
+          var sdd = bot.channels.find('name','pilloniere').fetchMessages({limit: 100})
+         .then(messages => 
+            {
+              let messagesArr = messages.array();
+              let messageCount = messagesArr.length;
+              for (var i = 0; i<messageCount; i++)
+              {
+                re += "<@"
+                re += messagesArr[i].content
+                re += "> "
+              }
+              message.channel.send({
+              embed: {color: 3447003, fields: [
+              {
+                name: "Nombre d'inscrits : " + messageCount,
+                value: re
+              }
+              ]}
+              })
+            }
+          ).catch(console.error);
+        }, 100);
+      }
+      else if (x==1)
+      {
+        // DEJA INSCRIT
+        message.channel.send("Deja inscrit(e) !")
+        message.delete(1000)
       }
     }
-    if (x==0)
-    {
-      inscrits[inscrits.length] = message.author
-      message.react("😁")
-      message.channel.send(message.author + " s'est inscrit(e) ! :blush:")
-      message.delete(1000)
-      message.channel.send({
-      embed: {color: 3447003, fields: [
-      {
-        name: "Nombre d'inscrits : " + inscrits.length,
-        value: liste(inscrits)
-      }
-      ]}
-      })
-    }
-    else
-    {
-      message.delete(1000)
-      message.channel.send("Deja inscrit(e) !")
-    }
-  }
+   ) 
+  .catch(console.error);
+
+}
+
+
 })
 
 bot.on('message', function (message)
 {
-  if (message.content === "-out")
+  if (message.content === "-out" && message.channel.name === "inscriptions-events")
   {
+
     var x = 0
-    var y = -1
-    for(var i = 0; i<inscrits.length; i++)
-    {
-      if (inscrits[i]==message.author)
+    var k = 0
+    var sdf = bot.channels.find('name','pilloniere').fetchMessages({limit: 100})
+    .then(messages => 
       {
-        x=1
-        y=i
+        let messagesArr = messages.array();
+        let messageCount = messagesArr.length;
+        for (var i = 0; i<messageCount; i++)
+        {
+          if (messagesArr[i].content == message.author.id)
+          {
+            messagesArr[i].delete()
+            x=1;
+          }
+          else
+          {
+            k++;
+          }
+        }
+
+        if (k==messageCount)
+        {
+          // PAS INSCRIT
+          message.channel.send("Vous n'étiez pas inscrit(e) !")
+          message.delete(1000)
+        }
+      else if (x==1)
+      {
+        // DEJA INSCRIT
+
+        message.react("😞")
+        message.channel.send(message.author + " s'est désinscrit(e) :sob:")
+        setTimeout(function()
+        {
+          var re = ""
+          var sdd = bot.channels.find('name','pilloniere').fetchMessages({limit: 100})
+          .then(messages => 
+            {
+              let messagesArr = messages.array();
+              let messageCount = messagesArr.length;
+              for (var i = 0; i<messageCount; i++)
+              {
+                re += "<@"
+                re += messagesArr[i].content
+                re += "> "
+              }
+              message.channel.send({
+              embed: {color: 3447003, fields: [
+              {
+                name: "Nombre d'inscrits : " + messageCount,
+                value: re
+              }
+              ]}
+              })
+            }
+          ).catch(console.error);
+        }, 100);
       }
     }
-    if(x==1)
-    {
-      message.react("😞")
-      message.delete(1000)
-      message.channel.send(message.author + " s'est désinscrit(e) :sob:")
-      inscrits.splice(y,1)
-      message.channel.send({
-      embed: {color: 3447003, fields: [
-      {
-        name: "Nombre d'inscrits : " + inscrits.length,
-        value: liste(inscrits)
-      }
-      ]}
-      })
-    }
-    else
-    {
-      message.delete(1000)
-      message.channel.send("Vous n'étiez pas inscrit(e) !")
-    }
+   ) 
+  .catch(console.error);
   }
 })
 
 
 bot.on('message', function (message)
 {
-  if (message.content === "-ins")
+  if (message.author.id != '391040544073318410' && message.content != "-in" && message.content != "-out" && message.channel.name === "inscriptions-events")
   {
-    message.delete(1000)
-      message.channel.send({
-      embed: {color: 3447003, fields: [
-      {
-        name: "Nombre d'inscrits : " + inscrits.length,
-        value: liste(inscrits)
-      }
-    ]}
-    })
+
+    message.delete(1)
   }
 })
 
@@ -152,7 +242,7 @@ bot.on('message', function (message)
 {
   if (message.content === "Deja inscrit(e) !")
   {
-    message.delete(3000)
+    message.delete(1000)
   }
 })
 
@@ -160,6 +250,32 @@ bot.on('message', function (message)
 {
   if (message.content === "Vous n'étiez pas inscrit(e) !")
   {
-    message.delete(3000)
+    message.delete(1000)
+  }
+})
+
+bot.on('message', function (message)
+{
+  if (message.content === 'très très sale mamèèèèène tu le saiiiiiiis' || message.content === 'shit de qualité supérieure mon srab' || message.content === 'bon pilon bien garni')
+  {
+    message.delete(1000)
+  }
+})
+
+bot.on('message', function (message)
+{
+  if (message.content === "-delete" && message.author.id == '299655232433160193' && message.channel.name == 'pilloniere')
+  {
+    var sdf = bot.channels.find('name','pilloniere').fetchMessages({limit: 100})
+    .then(messages => 
+      {
+        let messagesArr = messages.array();
+        let messageCount = messagesArr.length;
+        for (var i = 0; i<messageCount; i++)
+        {
+          messagesArr[i].delete()
+          
+        }
+     }).catch(console.error)
   }
 })
