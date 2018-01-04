@@ -117,9 +117,11 @@ bot.on('message', function (message)
 
         
         message.channel.send(message.author + " s'est inscrit(e) ! :blush:")
-        
+      
+
         setTimeout(function()
         {
+          var titre = ""
           var re = ""
           var sdd = bot.channels.find('name','pilloniere').fetchMessages({limit: 100})
          .then(messages => 
@@ -136,15 +138,12 @@ bot.on('message', function (message)
               var sdh = bot.channels.find('name', 'main-event').fetchMessages({limit: 1})
               .then(messages2 => 
                 {
-                  let titre = messages2.array()[0].content
-                  message.channel.send({
-                    embed: {color: 3447003, title: titre, fields: [
-                    {
-                      name: "Nombre d'inscrits : " + messageCount,
-                      value: re
-                    }
-                    ]}
-                    })
+                  titre = messages2.array()[0].content
+                  const emb = new Discord.RichEmbed()
+                  emb.setTitle(titre)
+                  emb.setColor(0x813370)
+                  emb.addField("Nombre d'inscrits : " + messageCount, re)
+                  message.channel.send(emb)
                 }
               ).catch(console.error);
             }
@@ -204,6 +203,7 @@ bot.on('message', function (message)
         message.channel.send(message.author + " s'est désinscrit(e) :sob:")
         setTimeout(function()
         {
+          var titre = ""
           var re = ""
           var sdd = bot.channels.find('name','pilloniere').fetchMessages({limit: 100})
           .then(messages => 
@@ -219,15 +219,12 @@ bot.on('message', function (message)
               var sdh = bot.channels.find('name', 'main-event').fetchMessages({limit: 1})
               .then(messages2 => 
                 {
-                  let titre = messages2.array()[0].content
-                  message.channel.send({
-                    embed: {color: 3447003, title: titre, fields: [
-                    {
-                      name: "Nombre d'inscrits : " + messageCount,
-                      value: re
-                    }
-                    ]}
-                    })
+                  titre = messages2.array()[0].content
+                  const emb = new Discord.RichEmbed()
+                  emb.setTitle(titre)
+                  emb.setColor(0x813370)
+                  emb.addField("Nombre d'inscrits : " + messageCount, re)
+                  message.channel.send(emb)
                 }
               ).catch(console.error);
             }
@@ -289,5 +286,39 @@ bot.on('message', function (message)
           
         }
      }).catch(console.error)
+  }
+})
+
+bot.on('message', function (message)
+{
+  if (message.content === "-ins" && message.channel.name === "inscriptions-events" && message.author.id == '299655232433160193')
+  {
+    var titre = ""
+    var re = ""
+    var sdd = bot.channels.find('name','pilloniere').fetchMessages({limit: 100})
+   .then(messages => 
+      {
+        let messagesArr = messages.array();
+        let messageCount = messagesArr.length;
+        for (var i = 0; i<messageCount; i++)
+        {
+          re += "<@"
+          re += messagesArr[i].content
+          re += "> "
+        }
+        
+        var sdh = bot.channels.find('name', 'main-event').fetchMessages({limit: 1})
+        .then(messages2 => 
+          {
+            titre = messages2.array()[0].content
+            const emb = new Discord.RichEmbed()
+            emb.setTitle(titre)
+            emb.setColor(0x813370)
+            emb.addField("Nombre d'inscrits : " + messageCount, re)
+            message.channel.send(emb)
+          }
+        ).catch(console.error)
+      }
+    ).catch(console.error)
   }
 })
