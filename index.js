@@ -6,13 +6,22 @@ const bot = new Discord.Client()
 
 bot.login(process.env.BOT_TOKEN)
 
-
- bot.on('ready', function()
+bot.on('ready', function()
  {
    bot.user.setPresence({ game: { name: 'faire du sale', type: 0 } });
  })
 
 // Exemple de lecture + écriture + aléatoire
+
+function shuffle(a) {
+    var j, x, i;
+    for (i = a.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        x = a[i];
+        a[i] = a[j];
+        a[j] = x;
+    }
+}
 
 bot.on('message', function (message)
 {
@@ -50,7 +59,7 @@ bot.on('message', function (message)
 
 bot.on('message', function (message)
 {
-  if (message.content === "-in" && message.channel.name === "inscriptions-events")
+  if (message.content === "-in" && message.channel.name === "events")
   {
  
   var x = 0
@@ -169,7 +178,7 @@ bot.on('message', function (message)
 
 bot.on('message', function (message)
 {
-  if (message.content === "-out" && message.channel.name === "inscriptions-events")
+  if (message.content === "-out" && message.channel.name === "events")
   {
 
     var x = 0
@@ -246,7 +255,7 @@ bot.on('message', function (message)
 
 bot.on('message', function (message)
 {
-  if (message.author.id != '391040544073318410' && message.content != "-in" && message.content != "-out" && message.channel.name === "inscriptions-events")
+  if (message.author.id != '391040544073318410' && message.content != "-in" && message.content != "-out" && message.channel.name === "events")
   {
 
     message.delete(1)
@@ -292,5 +301,54 @@ bot.on('message', function (message)
           
         }
      }).catch(console.error)
+  }
+})
+
+bot.on('message', function (message)
+{
+  if (message.content === "-teams" && message.channel.name === "events" && message.author.id == '299655232433160193')
+  {
+    var titre = ""
+    var t1 = ""
+    var t2 = ""
+    var sdd = bot.channels.find('name','pilloniere').fetchMessages({limit: 100})
+   .then(messages => 
+      {
+        let messagesArr = messages.array();
+        shuffle(messagesArr)
+        let messageCount = messagesArr.length;
+        for (var i = 0; i<Math.floor((messageCount+1)/2); i++)
+        {
+          t1 += "<@"
+          t1 += messagesArr[2*i].content
+          t1 += "> "
+        }
+        for (var i = 0; i<Math.floor((messageCount)/2); i++)
+        {
+          t2 += "<@"
+          t2 += messagesArr[(2*i)+1].content
+          t2 += "> "
+        }
+        
+        var sdh = bot.channels.find('name', 'main-event').fetchMessages({limit: 1})
+        .then(messages2 => 
+          {
+            titre = messages2.array()[0].content
+                  message.channel.send({
+              embed: {color: 3447003, title: titre, fields: [
+              {
+                name: "Team 1",
+                value: t1
+              },
+              {
+                name: "Team 2",
+                value: t2
+              }
+              ]}
+              })
+          }
+        ).catch(console.error)
+      }
+    ).catch(console.error)
   }
 })
