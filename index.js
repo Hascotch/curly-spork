@@ -149,7 +149,7 @@ bot.on('message', function (message)
                 {
                   titre = messages2.array()[0].content
                   message.channel.send({
-              embed: {color: 3447003, title: titre, fields: [
+              embed: {color: 1872, title: titre, fields: [
               {
                 name: "Nombre d'inscrits : " + messageCount,
                 value: re
@@ -233,7 +233,7 @@ bot.on('message', function (message)
                 {
                   titre = messages2.array()[0].content
                   message.channel.send({
-              embed: {color: 3447003, title: titre, fields: [
+              embed: {color: 1872, title: titre, fields: [
               {
                 name: "Nombre d'inscrits : " + messageCount,
                 value: re
@@ -335,7 +335,7 @@ bot.on('message', function (message)
           {
             titre = messages2.array()[0].content
                   message.channel.send({
-              embed: {color: 3447003, title: titre, fields: [
+              embed: {color: 1872, title: titre, fields: [
               {
                 name: "Team 1",
                 value: t1
