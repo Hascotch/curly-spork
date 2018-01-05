@@ -255,7 +255,7 @@ bot.on('message', function (message)
 
 bot.on('message', function (message)
 {
-  if (message.author.id != '391040544073318410' && message.content != "-in" && message.content != "-out" && message.channel.name === "events")
+  if (message.author.id != '391040544073318410' && message.content != "-in" && message.content != "-out" && message.content != "-teams" && message.channel.name === "events")
   {
 
     message.delete(1)
@@ -306,7 +306,7 @@ bot.on('message', function (message)
 
 bot.on('message', function (message)
 {
-  if (message.content === "-teams" && message.channel.name === "events" && message.author.id == '299655232433160193')
+  if (message.content === "-teams" && message.channel.name === "events")
   {
     var titre = ""
     var t1 = ""
