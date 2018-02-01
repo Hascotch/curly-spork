@@ -1,15 +1,28 @@
-// Préparation
+// Préparation - Connexion
+
+require('events').EventEmitter.prototype._maxListeners = 100;
 
 const Discord = require('discord.js')
 
 const bot = new Discord.Client()
 
+var botID = '391040544073318410'
+var rythmID = '235088799074484224'
+var adminID = '299655232433160193'
+var yggdrasilID = '247283454440374274'
+var sondagesID = '324631108731928587'
+
 bot.login(process.env.BOT_TOKEN)
 
+
+// Jeu joué
+
 bot.on('ready', function()
- {
-   bot.user.setPresence({ game: { name: 'faire du sale', type: 0 } });
- })
+{
+ bot.user.setPresence({ game: { name: 'faire du sale', type: 0 } });
+})
+
+// ----
 
 // Exemple de lecture + écriture + aléatoire
 
@@ -41,17 +54,6 @@ bot.on('message', function (message)
       message.channel.send('bon pilon bien garni')
     }
     message.delete(1000)
-  }
-})
-
-// Suppression des messages "/poll"
-
-bot.on('message', function (message)
-{
-  if (message.content.startsWith("/poll"))
-  {
-    message.delete(1000)
-    console.log('J\'ai enlevé un /poll mamène')
   }
 })
 
@@ -104,15 +106,15 @@ bot.on('message', function (message)
           setTimeout(function()
           {       
             message.react("🇮")
-          }, 500);
-          setTimeout(function()
-          {       
-            message.react("🇨")
           }, 1000);
           setTimeout(function()
           {       
+            message.react("🇨")
+          }, 2000);
+          setTimeout(function()
+          {       
             message.react("🇪")
-          }, 1500);
+          }, 3000);
         }
         else if (alea<4)
         {
@@ -172,9 +174,9 @@ bot.on('message', function (message)
    ) 
   .catch(console.error);
 }
-
-
 })
+
+// Désinscription aux events
 
 bot.on('message', function (message)
 {
@@ -222,26 +224,29 @@ bot.on('message', function (message)
             {
               let messagesArr = messages.array();
               let messageCount = messagesArr.length;
-              for (var i = 0; i<messageCount; i++)
+              if(messageCount>0)
               {
-                re += "<@"
-                re += messagesArr[i].content
-                re += "> "
-              }
-              var sdh = bot.channels.find('name', 'main-event').fetchMessages({limit: 1})
-              .then(messages2 => 
+                for (var i = 0; i<messageCount; i++)
                 {
-                  titre = messages2.array()[0].content
-                  message.channel.send({
-              embed: {color: 1872, title: titre, fields: [
-              {
-                name: "Nombre d'inscrits : " + messageCount,
-                value: re
-              }
-              ]}
-              })
+                  re += "<@"
+                  re += messagesArr[i].content
+                  re += "> "
                 }
-              ).catch(console.error);
+                var sdh = bot.channels.find('name', 'main-event').fetchMessages({limit: 1})
+                .then(messages2 => 
+                  {
+                    titre = messages2.array()[0].content
+                    message.channel.send({
+                embed: {color: 1872, title: titre, fields: [
+                {
+                  name: "Nombre d'inscrits : " + messageCount,
+                  value: re
+                }
+                ]}
+                })
+                  }             
+                ).catch(console.error);
+              }
             }
           ).catch(console.error);
         }, 100);
@@ -252,13 +257,62 @@ bot.on('message', function (message)
   }
 })
 
+// Nouveau membre !
+
+bot.on('guildMemberAdd', function (member)
+{
+  member.createDM().then(channel => channel.send("Bienvenue sur " + member.guild + ", " + member.displayName + " !! Pour avoir ton rôle et ta couleur personnelle, tu as juste a demander à <@" + adminID + "> (l'admin). Amuse-toi bien 😉"))
+})
+
+
+// Mauvais messages - Traitement
 
 bot.on('message', function (message)
 {
-  if (message.author.id != '391040544073318410' && message.content != "-in" && message.content != "-out" && message.content != "-teams" && message.channel.name === "events")
+  if ((message.content.startsWith("-p ") || message.content === "-np" || message.content === "-skip" || message.content === "-queue" || message.content === "-q" || message.content === "-join" || message.content === "-leave") && message.channel.name !== "musique")
   {
+    message.reply("⚠ Passe tes commandes de musique dans #musique stp")
+    message.delete()
+  }
+})
 
-    message.delete(1)
+bot.on('message', function (message)
+{
+  if (message.content.endsWith(" tes commandes de musique dans #musique stp"))
+  {
+    message.delete(5000)
+  }
+})
+
+bot.on('message', function (message)
+{
+  if (message.author.id === rythmID && message.channel.name !== "musique")
+  {
+    message.delete()
+  }
+})
+
+bot.on('message', function (message)
+{
+  if (message.content.startsWith("/poll"))
+  {
+    message.delete()
+  }
+})
+
+bot.on('message', function (message)
+{
+  if (message.author.id != botID && message.author.id != sondagesID && message.channel.name === "sondages" && !message.content.startsWith("/poll"))
+  {
+    message.delete()
+  }
+})
+
+bot.on('message', function (message)
+{
+  if (message.author.id != botID && message.content != "-in" && message.content != "-out" && message.content != "-teams" && message.channel.name === "events")
+  {
+    message.delete()
   }
 })
 
@@ -288,7 +342,7 @@ bot.on('message', function (message)
 
 bot.on('message', function (message)
 {
-  if (message.content === "-delete" && message.author.id == '299655232433160193' && message.channel.name == 'pilloniere')
+  if (message.content === "-delete" && message.author.id == adminID && message.channel.name == 'pilloniere')
   {
     var sdf = bot.channels.find('name','pilloniere').fetchMessages({limit: 100})
     .then(messages => 
@@ -298,11 +352,12 @@ bot.on('message', function (message)
         for (var i = 0; i<messageCount; i++)
         {
           messagesArr[i].delete()
-          
         }
      }).catch(console.error)
   }
 })
+
+// Création de teams
 
 bot.on('message', function (message)
 {
